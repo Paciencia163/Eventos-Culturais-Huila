@@ -10,6 +10,7 @@ import { statusLabels, statusColors, EventStatus } from "@/types/events";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { generateEventPDF } from "@/lib/generateEventPDF";
 
 type ActionType = "aprovar" | "rejeitar" | "em_analise" | "pendente_documentacao";
 
@@ -83,7 +84,9 @@ const EventDetail = () => {
             <h1 className="font-display text-2xl lg:text-3xl font-bold">{event.name}</h1>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm"><Download className="w-4 h-4 mr-1" /> Exportar</Button>
+            <Button variant="outline" size="sm" onClick={() => generateEventPDF(event, timeline)}>
+              <Download className="w-4 h-4 mr-1" /> Comprovativo PDF
+            </Button>
           </div>
         </div>
 

@@ -12,6 +12,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { PROVINCES } from "@/lib/provinces";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/jpg"];
@@ -83,8 +84,8 @@ const NewEvent = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!eventType) {
-      toast({ title: "Erro", description: "Selecione o tipo de evento.", variant: "destructive" });
+    if (!eventType || !formData.location) {
+      toast({ title: "Erro", description: "Selecione o tipo de evento e a província.", variant: "destructive" });
       return;
     }
     setIsSubmitting(true);
@@ -196,8 +197,17 @@ const NewEvent = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location">Local *</Label>
-                  <Input id="location" placeholder="Ex: Luanda" required className="h-11" value={formData.location} onChange={handleChange} />
+                  <Label>Província *</Label>
+                  <Select value={formData.location} onValueChange={(val) => setFormData((prev) => ({ ...prev, location: val }))}>
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="Selecionar província" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROVINCES.map((prov) => (
+                        <SelectItem key={prov} value={prov}>{prov}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
